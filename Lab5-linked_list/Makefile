@@ -3,7 +3,8 @@
 
 # Set the compiler and its flags
 CXX = g++
-CXX_FLAG = -Wall -std=c++11 -g -Iheader
+CXX_FLAG = -Wall -std=c++11 -g
+INCLUDE_PATH = -Iheader
 
 # Define memory checker tool (valgrind) and its flags
 CHECKCC = valgrind
@@ -11,7 +12,7 @@ CHECKCC_FLAG = --leak-check=full --show-leak-kinds=all --track-origins=yes --ver
 
 # Define static analysis tool (cppcheck) and its flags
 CPPCHECK = ../../cppcheck-2.13.0/cppcheck
-CPPCHECK_FLAG = -Iheader --enable=all --inconclusive --suppress=missingIncludeSystem
+CPPCHECK_FLAG = --enable=all --inconclusive --suppress=missingIncludeSystem
 
 # Set directories for output, memory logs, object files, golden files, and verification logs
 GOLDEN_DIRECTORY = golden
@@ -55,15 +56,15 @@ $(VERIFICATION_DIRECTORY):
 
 # Rule to compile the target executable from main.cpp and object files
 $(TARGET): main.cpp $(OBJECT)
-	$(CXX) $(CXX_FLAG) $^ -o $@
+	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) $^ -o $@
 
 # Rule to compile each source file into an object file
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
-	$(CXX) $(CXX_FLAG) -c $< -o $@
+	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -c $< -o $@
 
 # Run static analysis using cppcheck
 check:
-	./$(CPPCHECK) $(CPPCHECK_FLAG) .
+	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
 # Verify program output against golden reference files
 verify: run generate | $(VERIFICATION_DIRECTORY)
