@@ -5,7 +5,7 @@ int main(int argc, char** argv) {
     // Check if correct number of arguments is passed
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <input_file> <output_file>\n";
-        return -1;
+        exit(-1);
     }
 
     // Open input and output files
@@ -14,14 +14,14 @@ int main(int argc, char** argv) {
 
     // Check if the input file opened successfully
     if (!input_file) {
-        std::cerr << "Cannot open the input file!\n";
-        return -1;
+        std::cout << "Cannot open the input file: " << argv[1] << std::endl;
+        exit(-1);
     }
     
     // Check if the output file opened successfully
     if (!output_file) {
-        std::cerr << "Cannot open the output file!\n";
-        return -1;
+        std::cout << "Cannot open the output file: " << argv[2] << std::endl;
+        exit(-1);
     }
 
     // Create a new largest_same_path_finder object

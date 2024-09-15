@@ -43,12 +43,18 @@ const void load_case(image* const i, const int8_t& option) {
 }
 
 int main(int argc, char** argv) {
+    // Ensure there are enough command-line arguments
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " <input_image> <output_directory>/\n";
+        exit(-1);
+    }
+
     // Process grayscale image
     image* image_1 = new gray_image();
     if (image_1->load_image(argv[1])) { // Load grayscale image
         int8_t option_1 = PHOTO_MOSAIC; // Define processing options for grayscale image
         load_case(image_1, option_1);  // Apply selected operations
-        image_1->dump_image(std::string(argv[2]) + "/image_1.jpg"); // Save processed image
+        image_1->dump_image(std::string(argv[2]) + "image_1.jpg"); // Save processed image
     }
     delete image_1; // Clean up memory
     
@@ -57,7 +63,7 @@ int main(int argc, char** argv) {
     if (image_2->load_image(argv[1])) { // Load RGB image
         int8_t option_2 = PHOTO_MOSAIC; // Define processing options for RGB image
         load_case(image_2, option_2);  // Apply selected operations
-        image_2->dump_image(std::string(argv[2]) + "/image_2.jpg"); // Save processed image
+        image_2->dump_image(std::string(argv[2]) + "image_2.jpg"); // Save processed image
     }
     delete image_2; // Clean up memory
     

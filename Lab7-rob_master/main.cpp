@@ -5,14 +5,14 @@ int main(int argc, char** argv) {
     // Ensure there are enough command-line arguments
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <input_file> <output_file>\n";
-        return -1;
+        exit(-1);
     }
 
     // Open the input file
     std::ifstream input_file(argv[1]);
     if (!input_file) {
-        std::cerr << "Cannot open the input file!\n";
-        return -1;
+        std::cout << "Cannot open the input file: " << argv[1] << std::endl;
+        exit(-1);
     }
 
     // Create a new rob_master object to process the houses
@@ -25,9 +25,9 @@ int main(int argc, char** argv) {
     // Open the output file
     std::ofstream output_file(argv[2]);
     if (!output_file) {
-        std::cerr << "Cannot open the output file!\n";
+        std::cout << "Cannot open the output file: " << argv[2] << std::endl;
         delete rm; // Clean up before exit
-        return -1;
+        exit(-1);
     }
 
     // Output the maximum collectible money

@@ -58,7 +58,7 @@ check:
 
 # Run the program with memory checks using valgrind
 run: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
-	$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/$(MEMORY_DIRECTORY).log ./$(TARGET) $(INPUT_IMAGE) $(OUTPUT_DIRECTORY)
+	$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/$(MEMORY_DIRECTORY).log ./$(TARGET) $(INPUT_IMAGE) $(OUTPUT_DIRECTORY)/
 
 # Clone and build required external libraries
 install:
