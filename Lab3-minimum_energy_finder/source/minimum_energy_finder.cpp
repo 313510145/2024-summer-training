@@ -21,7 +21,7 @@ const void minimum_energy_finder::input_information_and_calculate(std::istream& 
     for (auto& tl: temp_list) {
         is >> tl.time;  // Input time
         // Store item in the map based on its weight/time ratio
-        this->garage[static_cast<double>(tl.weight) / tl.time].push_back(tl);
+        this->garage[static_cast<double>(tl.weight) / tl.time].push_front(tl);
     }
     
     // Clear the temporary list after use
