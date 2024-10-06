@@ -1,5 +1,5 @@
 # Define phony targets, which don't correspond to real files
-.PHONY: all check verify run generate clean
+.PHONY: all check verify run run_valgrind generate clean
 
 # Compiler and flags used for compilation
 CXX = g++
@@ -74,8 +74,16 @@ verify: run generate | $(VERIFICATION_DIRECTORY)
 		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".log; \
 	done
 
-# Run the program with memory check (valgrind) on all test cases
+# Run the program on all test cases
 run: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
+	for testcase in $(TESTCASE); do \
+		testcase_base=$$(basename "$$testcase"); \
+		testcase_base=$${testcase_base%.*}; \
+		./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
+	done
+
+# Run the program with memory check (valgrind) on all test cases
+run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \

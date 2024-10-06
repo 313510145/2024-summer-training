@@ -1,5 +1,5 @@
 # Define phony targets, which are not real files but command actions
-.PHONY: all check run install clean
+.PHONY: all check run run_valgrind install clean
 
 # Compiler and flags
 CXX = g++
@@ -56,8 +56,12 @@ $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 check:
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
-# Run the program with memory checks using valgrind
+# Run the program
 run: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
+	./$(TARGET) $(INPUT_IMAGE) $(OUTPUT_DIRECTORY)/
+
+# Run the program with memory checks using valgrind
+run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/$(MEMORY_DIRECTORY).log ./$(TARGET) $(INPUT_IMAGE) $(OUTPUT_DIRECTORY)/
 
 # Clone and build required external libraries

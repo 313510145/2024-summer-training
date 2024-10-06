@@ -1,5 +1,5 @@
 # Define phony targets, which represent commands rather than files
-.PHONY: all check verify run case_generate clean
+.PHONY: all check verify run run_valgrind case_generate clean
 
 # Set the compiler and its flags
 CXX = g++
@@ -78,8 +78,16 @@ verify: run golden_generate | $(VERIFICATION_DIRECTORY)
 		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".log; \
 	done
 
-# Run the program with valgrind and generate output for each test case
+# Run the program and generate output for each test case
 run: $(TARGET) case_generate | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
+	for testcase in $(TESTCASE); do \
+		testcase_base=$$(basename "$$testcase"); \
+		testcase_base=$${testcase_base%.*}; \
+		./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
+	done
+
+# Run the program with valgrind and generate output for each test case
+run_valgrind: $(TARGET) case_generate | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
