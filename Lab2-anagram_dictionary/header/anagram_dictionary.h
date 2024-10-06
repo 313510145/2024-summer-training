@@ -1,7 +1,7 @@
 #ifndef ANAGRAM_DICTIONARY_H
 #define ANAGRAM_DICTIONARY_H
 
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <iostream>
 #include <list>
@@ -22,7 +22,7 @@ class anagram_dictionary {
         ~anagram_dictionary();
     private:
         // A map that stores lists of words grouped by their sorted character sequences
-        std::unordered_map<std::string, std::list<std::string>> group;
+        std::map<std::string, std::list<std::string>> group;
 };
 
 #endif  // ANAGRAM_DICTIONARY_H
