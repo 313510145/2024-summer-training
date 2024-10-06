@@ -57,7 +57,7 @@ check:
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
 # Run the program
-run: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
+run: $(TARGET) | $(OUTPUT_DIRECTORY)
 	./$(TARGET) $(INPUT_IMAGE) $(OUTPUT_DIRECTORY)/
 
 # Run the program with memory checks using valgrind

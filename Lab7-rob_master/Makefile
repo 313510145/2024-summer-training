@@ -75,7 +75,7 @@ verify: run generate | $(VERIFICATION_DIRECTORY)
 	done
 
 # Run the program for each test case
-run: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
+run: $(TARGET) | $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \

@@ -79,7 +79,7 @@ verify: run golden_generate | $(VERIFICATION_DIRECTORY)
 	done
 
 # Run the program and generate output for each test case
-run: $(TARGET) case_generate | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
+run: $(TARGET) case_generate | $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
