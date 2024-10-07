@@ -1,0 +1,72 @@
+.model top_809960632_810038711_1598227639_893650103
+.inputs n51 n12 n67 n78 n22 n80 n72 n75 
+.outputs n6
+.names g28 n6
+1 1
+.names n60 n5 g28
+00 1
+11 1
+.names g22 n60
+1 1
+.names n37 n12 g22
+11 1
+10 1
+01 1
+.names g40 n37
+1 1
+.names n51 g40
+0 1
+.names g1 n5
+1 1
+.names n45 n53 g1
+00 1
+11 1
+.names g31 n45
+1 1
+.names n54 n43 g31
+11 1
+.names g57 n54
+1 1
+.names n88 n78 g57
+11 1
+10 1
+01 1
+.names g24 n88
+1 1
+.names n67 g24
+0 1
+.names g19 n43
+1 1
+.names n22 n20 g19
+11 1
+.names g12 n20
+1 1
+.names n80 n67 g12
+11 1
+10 1
+01 1
+.names g66 n53
+1 1
+.names n58 n41 g66
+11 1
+10 1
+01 1
+.names g8 n58
+1 1
+.names n72 n67 g8
+11 1
+.names g56 n41
+1 1
+.names n22 n83 g56
+11 1
+10 1
+01 1
+.names g68 n83
+1 1
+.names n29 n67 g68
+00 1
+.names g33 n29
+1 1
+.names n75 g33
+0 1
+.end

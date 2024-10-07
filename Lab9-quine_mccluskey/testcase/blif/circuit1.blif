@@ -1,0 +1,186 @@
+.model top_809960632_810038711_1598227639_893650103
+.inputs n12 n2 n78 n18 n80 n51 n67 n22 n72 n75 n57 n34 
+.outputs n9
+.names g2 n9
+1 1
+.names n61 n30 g2
+10 1
+01 1
+.names g45 n61
+1 1
+.names n12 n7 g45
+00 1
+.names g13 n7
+1 1
+.names n84 n76 g13
+00 1
+.names g74 n84
+1 1
+.names n0 n10 g74
+11 1
+.names g69 n0
+1 1
+.names n66 g69
+0 1
+.names g65 n66
+1 1
+.names n85 n87 g65
+11 1
+.names g67 n85
+1 1
+.names n24 n78 g67
+11 1
+10 1
+01 1
+.names g9 n24
+1 1
+.names n2 g9
+0 1
+.names g25 n87
+1 1
+.names n18 n26 g25
+11 1
+.names g7 n26
+1 1
+.names n80 n2 g7
+11 1
+10 1
+01 1
+.names g44 n10
+1 1
+.names n51 n15 g44
+11 1
+.names g16 n15
+1 1
+.names n45 g16
+0 1
+.names g31 n45
+1 1
+.names n54 n43 g31
+11 1
+.names g57 n54
+1 1
+.names n88 n78 g57
+11 1
+10 1
+01 1
+.names g24 n88
+1 1
+.names n67 g24
+0 1
+.names g19 n43
+1 1
+.names n22 n20 g19
+11 1
+.names g12 n20
+1 1
+.names n80 n67 g12
+11 1
+10 1
+01 1
+.names g64 n76
+1 1
+.names n50 n62 g64
+11 1
+10 1
+01 1
+.names g15 n50
+1 1
+.names n28 n36 g15
+11 1
+.names g76 n28
+1 1
+.names n17 n24 g76
+11 1
+10 1
+01 1
+.names g58 n17
+1 1
+.names n72 g58
+0 1
+.names g48 n36
+1 1
+.names n18 n23 g48
+00 1
+.names g62 n23
+1 1
+.names n29 n2 g62
+00 1
+.names g33 n29
+1 1
+.names n75 g33
+0 1
+.names g72 n62
+1 1
+.names n53 n66 g72
+00 1
+.names g66 n53
+1 1
+.names n58 n41 g66
+11 1
+10 1
+01 1
+.names g8 n58
+1 1
+.names n72 n67 g8
+11 1
+.names g56 n41
+1 1
+.names n22 n83 g56
+11 1
+10 1
+01 1
+.names g68 n83
+1 1
+.names n29 n67 g68
+00 1
+.names g55 n30
+1 1
+.names n11 n55 g55
+00 1
+11 1
+.names g61 n11
+1 1
+.names n46 n31 g61
+11 1
+.names g49 n46
+1 1
+.names n71 n78 g49
+11 1
+10 1
+01 1
+.names g27 n71
+1 1
+.names n57 g27
+0 1
+.names g6 n31
+1 1
+.names n34 n44 g6
+11 1
+.names g63 n44
+1 1
+.names n80 n57 g63
+11 1
+10 1
+01 1
+.names g32 n55
+1 1
+.names n52 n64 g32
+11 1
+10 1
+01 1
+.names g14 n52
+1 1
+.names n72 n57 g14
+11 1
+.names g75 n64
+1 1
+.names n34 n13 g75
+11 1
+10 1
+01 1
+.names g52 n13
+1 1
+.names n29 n57 g52
+00 1
+.end
