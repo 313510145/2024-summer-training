@@ -67,7 +67,7 @@ $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -c $< -o $@
 
 # Run static analysis using cppcheck
-check:
+check: $(CPPCHECK)
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
 # Verify program output against golden reference files
@@ -95,14 +95,14 @@ run_valgrind: $(TARGET) case_generate | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	done
 
 # Generate test cases from 3 to NUM_CASE using the case generator script
-case_generate:
+case_generate: $(CASE_GENERATOR)
 	((i = 3)); while [ $$i -le $(NUM_CASE) ]; do \
 		./$(CASE_GENERATOR) testcase/"$$i".in; \
 		((i = i + 1)); \
 	done
 
 # Generate golden output for each test case using the golden generator script
-golden_generate: | $(GOLDEN_DIRECTORY)
+golden_generate: $(GOLDEN_GENERATOR) | $(GOLDEN_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \

@@ -40,16 +40,19 @@ all: $(TARGET)
 
 # Rules to create necessary directories if they don't exist
 $(MEMORY_DIRECTORY):
-	mkdir -p $(MEMORY_DIRECTORY)
+	mkdir $(MEMORY_DIRECTORY)
 
 $(OBJECT_DIRECTORY):
-	mkdir -p $(OBJECT_DIRECTORY)
+	mkdir $(OBJECT_DIRECTORY)
 
 $(OUTPUT_DIRECTORY):
-	mkdir -p $(OUTPUT_DIRECTORY)
+	mkdir $(OUTPUT_DIRECTORY)
 
 $(VERIFICATION_DIRECTORY):
-	mkdir -p $(VERIFICATION_DIRECTORY)
+	mkdir $(VERIFICATION_DIRECTORY)
+
+$(LIBRARY_DIRECTORY):
+	mkdir $(LIBRARY_DIRECTORY)
 
 # Rule to compile the target executable from main.cpp and object files
 $(TARGET): main.cpp $(OBJECT)
@@ -60,7 +63,7 @@ $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -c $< -o $@
 
 # Run static analysis using cppcheck
-check:
+check: $(CPPCHECK)
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
 # Verify program output against golden reference files
@@ -90,8 +93,7 @@ run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	done
 
 # Install ABC library from GitHub
-install:
-	mkdir -p $(LIBRARY_DIRECTORY)
+install: | $(LIBRARY_DIRECTORY)
 	git clone https://github.com/berkeley-abc/abc.git $(LIBRARY_DIRECTORY)/abc
 	cd $(LIBRARY_DIRECTORY)/abc; \
 	make -j

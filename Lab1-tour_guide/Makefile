@@ -63,7 +63,7 @@ $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -c $< -o $@
 
 # Run static analysis using cppcheck
-check:
+check: $(CPPCHECK)
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
 # Verify output against golden reference by running and generating output, then comparing with golden files
@@ -91,7 +91,7 @@ run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	done
 
 # Generate golden output for each test case using the generator script
-generate: | $(GOLDEN_DIRECTORY)
+generate: $(GENERATOR) | $(GOLDEN_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \

@@ -44,6 +44,9 @@ $(OBJECT_DIRECTORY):
 $(OUTPUT_DIRECTORY):
 	mkdir $(OUTPUT_DIRECTORY)
 
+$(LIBRARY_DIRECTORY):
+	mkdir $(LIBRARY_DIRECTORY)
+
 # Build the target executable from the source and object files
 $(TARGET): main.cpp $(OBJECT)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) $(OPTIMIZATION_FLAG) $^ -o $@ $(LINKER)
@@ -53,7 +56,7 @@ $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) $(OPTIMIZATION_FLAG) -c $< -o $@
 
 # Run static code analysis with cppcheck
-check:
+check: $(CPPCHECK)
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
 # Run the program
@@ -65,8 +68,7 @@ run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/$(MEMORY_DIRECTORY).log ./$(TARGET) $(INPUT_IMAGE) $(OUTPUT_DIRECTORY)/
 
 # Clone and build required external libraries
-install:
-	mkdir $(LIBRARY_DIRECTORY)
+install: | $(LIBRARY_DIRECTORY)
 	git clone https://github.com/GreycLab/CImg $(LIBRARY_DIRECTORY)/CImg
 	git clone https://github.com/kornelski/libjpeg $(LIBRARY_DIRECTORY)/libjpeg
 	cd $(LIBRARY_DIRECTORY)/libjpeg; \
