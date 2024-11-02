@@ -4,7 +4,7 @@
 #include "RGB_image.h"
 #include "filter.h"
 
-#include <cassert>
+#include <iostream>
 
 // Bitmask constants for various image processing options
 const int8_t BOX           = 0b00000001,  // Apply box filter
