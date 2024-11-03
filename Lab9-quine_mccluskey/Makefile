@@ -67,7 +67,7 @@ check: $(CPPCHECK)
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
 # Verify program output against golden reference files
-verify: run | $(VERIFICATION_DIRECTORY)
+verify: run $(ABC) | $(VERIFICATION_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
