@@ -39,4 +39,4 @@ class quine_mccluskey {
         std::vector<std::pair<std::string, bool>>*** on_set;  // On-set of logic functions for minimization
 };
 
-#endif
+#endif  // QUINE_MCCLUSKEY_H
