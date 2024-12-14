@@ -173,8 +173,6 @@ void quine_mccluskey::output_blif(std::ostream& os) {
         }
     }
 
-
-
     os << "\n.end\n"; // End of the BLIF output
 }
 
