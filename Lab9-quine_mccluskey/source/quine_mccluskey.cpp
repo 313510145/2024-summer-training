@@ -402,17 +402,14 @@ void quine_mccluskey::do_quine_mccluskey() {
                         }
                         // If exactly one difference was found
                         if (v.size() == 1) {
-                            // Ensure the differing positions are not '-' (don't allow don't-care states)
-                            if (l.first[v[0]] != '-' && m.first[v[0]] != '-') {
-                                l.second = false; // Mark current as non-essential
-                                m.second = false; // Mark next as non-essential
-                                std::string str = l.first;
-                                str[v[0]] = '-'; // Replace differing bit with '-'
+                            l.second = false; // Mark current as non-essential
+                            m.second = false; // Mark next as non-essential
+                            std::string str = l.first;
+                            str[v[0]] = '-'; // Replace differing bit with '-'
 
-                                // Check if the new combination is already in the next set
-                                if (std::find(on_set[o][i + 1][j].begin(), on_set[o][i + 1][j].end(), make_pair(str, true)) == on_set[o][i + 1][j].end()) {
-                                    this->on_set[o][i + 1][j].push_back(make_pair(str, true)); // Add the new combination
-                                }
+                            // Check if the new combination is already in the next set
+                            if (std::find(on_set[o][i + 1][j].begin(), on_set[o][i + 1][j].end(), make_pair(str, true)) == on_set[o][i + 1][j].end()) {
+                                this->on_set[o][i + 1][j].push_back(make_pair(str, true)); // Add the new combination
                             }
                         }
                         v.clear(); // Clear the vector for the next iteration
