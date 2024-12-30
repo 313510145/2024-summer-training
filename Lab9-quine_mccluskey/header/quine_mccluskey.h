@@ -1,42 +1,39 @@
+// Prevent multiple inclusions
 #ifndef QUINE_MCCLUSKEY_H
 #define QUINE_MCCLUSKEY_H
 
-#include "gate.h"
-#include <iostream>
+#include "gate.h"              // Include gate class
+#include <set>                  // Set container
+#include <iostream>             // Input/output streams
+#include <unordered_map>        // Hash table implementation
 
-// Class for implementing the Quine-McCluskey algorithm
 class quine_mccluskey {
     public:
-        // Read input from a Verilog file stream
-        void input_verilog(std::istream& is);
+        // Input/output methods
+        void input_verilog(std::istream& is);   // Read circuit from Verilog format
+        void output_blif(std::ostream& os);    // Write circuit in BLIF format
 
-        // Write output to a BLIF file stream
-        void output_blif(std::ostream& os);
+        // Constructor and destructor
+        quine_mccluskey();                      // Initialize object
+        ~quine_mccluskey();                     // Cleanup resources
 
-        // Default constructor
-        quine_mccluskey();
-
-        // Destructor
-        ~quine_mccluskey();
     private:
-        // Perform levelization on the netlist (to organize gates by logic level)
-        void levelization();
+        // Core methods for computation
+        void levelization();                     // Perform levelization on gates
+        void enumerate_all_combination();        // Enumerate combinations for minimization
+        void do_quine_mccluskey();               // Execute Quine-McCluskey algorithm
+        bool next_permutation();                 // Generate next permutation
 
-        // Enumerate all possible combinations of the inputs
-        void enumerate_all_combination();
-
-        // Execute the Quine-McCluskey algorithm for logic minimization
-        void do_quine_mccluskey();
-
-        // Generate the next permutation of the logic values
-        bool next_permutation();
-
-        std::string name;  // Name of the netlist or circuit
-        std::vector<gate*> netlist;  // List of all gates in the circuit
-        std::vector<gate*> PI_list;  // List of primary input gates
-        std::vector<gate*> PO_list;  // List of primary output gates
-        unsigned int max_level;  // Maximum logic level in the circuit
-        std::vector<std::pair<std::string, bool>>*** on_set;  // On-set of logic functions for minimization
+        // Data members
+        std::string name;                                            // Circuit name
+        std::unordered_map<std::string, GATE_FUNCTION> name_to_function; // Map names to functions
+        std::unordered_map<std::string, gate*> name_to_gate;         // Map names to gate objects
+        std::vector<gate*> netlist;                                 // List of all gates
+        std::vector<gate*> PI_list;                                 // Primary inputs
+        std::vector<gate*> PO_list;                                 // Primary outputs
+        unsigned int max_level;                                     // Maximum logic level
+        std::vector<std::vector<std::pair<std::string, bool>>>* on_set; // On-set for minimization
+        std::set<std::string>* prime_implicant;                     // Prime implicants
 };
 
 #endif  // QUINE_MCCLUSKEY_H

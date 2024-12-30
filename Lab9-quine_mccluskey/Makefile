@@ -1,44 +1,43 @@
-# Define phony targets, which are not real files but command actions
+# Target names for different tasks and phony targets
 .PHONY: all check verify run run_valgrind generate install clean
 
-# Set the compiler and its flags
+# Compiler and flags for C++ source code
 CXX = g++
 CXX_FLAG = -Wall -std=c++11 -g
 INCLUDE_PATH = -Iheader
 
-# Define memory checker tool (valgrind) and its flags
+# Tools and their configurations for checking memory leaks and code quality
 CHECKCC = valgrind
 CHECKCC_FLAG = --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
-
-# Define static analysis tool (cppcheck) and its flags
 CPPCHECK = ../../cppcheck-2.13.0/cppcheck
 CPPCHECK_FLAG = --enable=all --inconclusive --suppress=missingIncludeSystem
 
-# Set directories for output, memory logs, object files, golden files, and verification logs
+# Directory variables to organize output, verification, and sources
+GOLDEN_DIRECTORY = golden
 MEMORY_DIRECTORY = memory
 OBJECT_DIRECTORY = object
 OUTPUT_DIRECTORY = output
 LIBRARY_DIRECTORY = library
 VERIFICATION_DIRECTORY = verification
-
-# Define the directory for source files and test cases
 SOURCE_DIRECTORY = source
 TESTCASE_DIRECTORY = testcase
 
-# Gather all source files and create a list of corresponding object files
+# Source and object file definitions
 SOURCE = $(wildcard $(SOURCE_DIRECTORY)/*.cpp)
 OBJECT = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.o, $(SOURCE))
-
-# Collect all test case files from the 'testcase' directory
 TESTCASE = $(wildcard $(TESTCASE_DIRECTORY)/verilog/*)
 
+# Main executable target and library dependencies
 TARGET = Lab9
 ABC = $(LIBRARY_DIRECTORY)/abc/abc
 
-# Default target to build the project
+# Default target: Build the executable
 all: $(TARGET)
 
-# Rules to create necessary directories if they don't exist
+# Create necessary directories
+$(GOLDEN_DIRECTORY):
+	mkdir $(GOLDEN_DIRECTORY)
+
 $(MEMORY_DIRECTORY):
 	mkdir $(MEMORY_DIRECTORY)
 
@@ -54,29 +53,30 @@ $(VERIFICATION_DIRECTORY):
 $(LIBRARY_DIRECTORY):
 	mkdir $(LIBRARY_DIRECTORY)
 
-# Rule to compile the target executable from main.cpp and object files
+# Compile main executable with object files
 $(TARGET): main.cpp $(OBJECT)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) $^ -o $@
 
-# Rule to compile each source file into an object file
+# Compile individual source files into object files
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -c $< -o $@
 
-# Run static analysis using cppcheck
+# Check code quality using cppcheck
 check: $(CPPCHECK)
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
-# Verify program output against golden reference files
-verify: run $(ABC) | $(VERIFICATION_DIRECTORY)
+# Verify results by comparing outputs with golden references
+verify: run generate $(ABC) | $(VERIFICATION_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
 		./$(ABC) -c "cec $(OUTPUT_DIRECTORY)/"$$testcase_base".blif $(TESTCASE_DIRECTORY)/blif/"$$testcase_base".blif" | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".equiv; \
-		./$(ABC) -c "read_blif $(OUTPUT_DIRECTORY)/"$$testcase_base".blif; st; ps;" | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".size; \
+		./$(ABC) -c "read_blif $(OUTPUT_DIRECTORY)/"$$testcase_base".blif; st; ps;" | tee $(OUTPUT_DIRECTORY)/"$$testcase_base".size; \
+		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".size $(GOLDEN_DIRECTORY)/"$$testcase_base".size | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".size; \
 	done
 	rm -rf abc.history
 
-# Run the program for each test case
+# Run the main executable with testcases
 run: $(TARGET) | $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
@@ -84,7 +84,7 @@ run: $(TARGET) | $(OUTPUT_DIRECTORY)
 		./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".blif; \
 	done
 
-# Run the program with valgrind for each test case
+# Run the main executable with Valgrind for memory checking
 run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
@@ -92,12 +92,21 @@ run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/"$$testcase_base.log" ./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".blif; \
 	done
 
-# Install ABC library from GitHub
+# Generate golden reference outputs using ABC tool
+generate: $(ABC) | $(GOLDEN_DIRECTORY)
+	for testcase in $(TESTCASE); do \
+		testcase_base=$$(basename "$$testcase"); \
+		testcase_base=$${testcase_base%.*}; \
+		./$(ABC) -c "read_blif $(TESTCASE_DIRECTORY)/blif/"$$testcase_base".blif; st; ps;" | tee $(GOLDEN_DIRECTORY)/"$$testcase_base".size; \
+	done
+	rm -rf abc.history
+
+# Install ABC tool from GitHub repository
 install: | $(LIBRARY_DIRECTORY)
 	git clone https://github.com/berkeley-abc/abc.git $(LIBRARY_DIRECTORY)/abc
 	cd $(LIBRARY_DIRECTORY)/abc; \
 	make -j
 
-# Clean up all generated files and directories
+# Clean all generated files and directories
 clean:
-	rm -rf $(TARGET) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(LIBRARY_DIRECTORY) $(VERIFICATION_DIRECTORY)
+	rm -rf $(TARGET) $(GOLDEN_DIRECTORY) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(LIBRARY_DIRECTORY) $(VERIFICATION_DIRECTORY)
