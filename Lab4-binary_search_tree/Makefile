@@ -3,7 +3,7 @@
 
 # Set the compiler and its flags
 CXX = g++
-CXX_FLAG = -Wall -std=c++11 -g
+CXX_FLAG = -Wall -Wextra -std=c++11 -g
 INCLUDE_PATH = -Iheader
 
 # Define memory checker tool (valgrind) and its flags

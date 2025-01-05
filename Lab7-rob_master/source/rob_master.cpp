@@ -1,7 +1,7 @@
 #include "rob_master.h"
 
 // Reads house money information, calculates maximum collectible amount for each house using dynamic programming
-const void rob_master::input_information_and_calculate(std::istream& is) {
+void rob_master::input_information_and_calculate(std::istream& is) {
     house temp_house;
     temp_house.money = 0;
 
@@ -34,7 +34,7 @@ const void rob_master::input_information_and_calculate(std::istream& is) {
 }
 
 // Outputs the maximum collectible amount across all houses
-const void rob_master::output_maximum_amount(std::ostream& os) const {
+void rob_master::output_maximum_amount(std::ostream& os) const {
     // If there are no houses, the maximum amount collectible is 0
     if (!this->community.size()) {
         os << 0;

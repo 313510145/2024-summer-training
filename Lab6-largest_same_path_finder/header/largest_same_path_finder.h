@@ -15,7 +15,7 @@ struct vertex {
 class largest_same_path_finder {
     public:
         // Reads input and performs BFS, then outputs the result
-        const void input_information_and_output_result(std::istream& is, std::ostream& os);
+        void input_information_and_output_result(std::istream& is, std::ostream& os);
         
         // Constructor to initialize the graph finder
         largest_same_path_finder();
@@ -25,10 +25,10 @@ class largest_same_path_finder {
         
     private:
         // Performs BFS from a given starting vertex
-        const void bfs(const unsigned int& from);
+        void bfs(const unsigned int& from);
         
         // Sets the paths to capital and resort using BFS results
-        const void set_path();
+        void set_path();
         
         // Adjacency list representing the graph
         std::unordered_map<unsigned int, std::list<unsigned int>> adjacency_list;

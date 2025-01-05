@@ -3,7 +3,7 @@
 
 # Compiler and flags used for compilation
 CXX = g++
-CXX_FLAG = -Wall -std=c++11 -g
+CXX_FLAG = -Wall -Wextra -std=c++11 -g
 INCLUDE_PATH = -Iheader
 
 # Memory check tool and flags for valgrind

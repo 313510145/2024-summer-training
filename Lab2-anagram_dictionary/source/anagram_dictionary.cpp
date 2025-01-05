@@ -3,7 +3,7 @@
 
 // Method to input strings, group them by their sorted character sequences
 // Each input string is stripped of brackets and quotes, sorted, and stored in the map
-const void anagram_dictionary::input_string_and_group(std::istream& is) {
+void anagram_dictionary::input_string_and_group(std::istream& is) {
     std::string current_line;
     
     // Read each line of input separated by a comma
@@ -29,7 +29,7 @@ const void anagram_dictionary::input_string_and_group(std::istream& is) {
 
 // Method to output the grouped anagrams
 // Outputs each group of anagrams stored in the map
-const void anagram_dictionary::output_group(std::ostream& os) const {
+void anagram_dictionary::output_group(std::ostream& os) const {
     for (const auto& g: this->group) {
         // Handle edge case for empty input line
         if (g.first == "") {

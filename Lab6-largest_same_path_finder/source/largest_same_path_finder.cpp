@@ -2,7 +2,7 @@
 #include <queue>
 
 // Reads input, processes the graph, and outputs the largest common path
-const void largest_same_path_finder::input_information_and_output_result(std::istream& is, std::ostream& os) {
+void largest_same_path_finder::input_information_and_output_result(std::istream& is, std::ostream& os) {
     unsigned int num_city, num_query, temp_a, temp_b;
 
     // Read number of cities, queries, and define the capital and resort cities
@@ -52,7 +52,7 @@ largest_same_path_finder::~largest_same_path_finder() {
 }
 
 // Perform BFS starting from a specific city to find paths to the capital and resort
-const void largest_same_path_finder::bfs(const unsigned int& from) {
+void largest_same_path_finder::bfs(const unsigned int& from) {
     vertex initial_vertex;
     initial_vertex.color = 'w';             // White color means unvisited
     initial_vertex.parent = 0xFFFFFFFF;     // No parent initially
@@ -105,7 +105,7 @@ const void largest_same_path_finder::bfs(const unsigned int& from) {
 }
 
 // Set the path to the capital and resort using BFS results
-const void largest_same_path_finder::set_path() {
+void largest_same_path_finder::set_path() {
     unsigned int current_vertex;
 
     // Clear and set path to capital

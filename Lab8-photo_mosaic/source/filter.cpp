@@ -12,7 +12,7 @@
 // - h: Height of the image.
 // - pixel: 2D array representing the grayscale pixel values of the image.
 // - r: Radius of the box filter kernel.
-const void filter::box_gray(const int& w, const int& h, int** const pixel, const int& r) {
+void filter::box_gray(const int& w, const int& h, int** const pixel, const int& r) {
     // Dynamically allocate a 2D array to store the intermediate results after the horizontal pass of the filter.
     double** result_pixel = new double*[h];
     for (auto y = 0; y < h; y++) {
@@ -100,7 +100,7 @@ const void filter::box_gray(const int& w, const int& h, int** const pixel, const
 // - h: Height of the image.
 // - pixel: 3D array representing the RGB pixel values of the image, with each pixel containing three components (R, G, B).
 // - r: Radius of the box filter kernel.
-const void filter::box_RGB(const int& w, const int& h, int*** const pixel, const int& r) {
+void filter::box_RGB(const int& w, const int& h, int*** const pixel, const int& r) {
     // Dynamically allocate a 3D array to store the intermediate results after the horizontal pass of the filter.
     double*** result_pixel = new double**[h];
     for (auto y = 0; y < h; y++) {
@@ -209,7 +209,7 @@ const void filter::box_RGB(const int& w, const int& h, int*** const pixel, const
 // - w: Width of the image.
 // - h: Height of the image.
 // - pixel: 2D array representing the grayscale pixel values of the image.
-const void filter::sobel_gray(const int& w, const int& h, int** const pixel) {
+void filter::sobel_gray(const int& w, const int& h, int** const pixel) {
     // Dynamically allocate a 2D array to store the results of the Sobel operation.
     int** result_pixel = new int*[h];
     for (auto y = 0; y < h; y++) {
@@ -256,7 +256,7 @@ const void filter::sobel_gray(const int& w, const int& h, int** const pixel) {
 // - w: Width of the image.
 // - h: Height of the image.
 // - pixel: 3D array representing the RGB pixel values of the image.
-const void filter::sobel_RGB(const int& w, const int& h, int*** const pixel) {
+void filter::sobel_RGB(const int& w, const int& h, int*** const pixel) {
     // Dynamically allocate a 3D array to store the results of the Sobel operation.
     int*** result_pixel = new int**[h];
     for (auto y = 0; y < h; y++) {
@@ -309,7 +309,7 @@ const void filter::sobel_RGB(const int& w, const int& h, int*** const pixel) {
 // - w: Width of the image.
 // - h: Height of the image.
 // - pixel: 2D array representing the grayscale pixel values of the image.
-const void filter::normalization_gray(const int& w, const int& h, int** const pixel) {
+void filter::normalization_gray(const int& w, const int& h, int** const pixel) {
     int max = 0, min = INT_MAX;
 
     // Find the maximum and minimum pixel values.
@@ -333,7 +333,7 @@ const void filter::normalization_gray(const int& w, const int& h, int** const pi
 // - w: Width of the image.
 // - h: Height of the image.
 // - pixel: 3D array representing the RGB pixel values of the image.
-const void filter::normalization_RGB(const int& w, const int& h, int*** const pixel) {
+void filter::normalization_RGB(const int& w, const int& h, int*** const pixel) {
     int max[3] = {0}, min[3] = {INT_MAX, INT_MAX, INT_MAX};
 
     // Find the maximum and minimum pixel values for each color channel.
@@ -357,7 +357,7 @@ const void filter::normalization_RGB(const int& w, const int& h, int*** const pi
 }
 
 // Applies a mosaic filter to a grayscale image by averaging pixel values within non-overlapping square blocks of size r x r.
-const void filter::mosaic_gray(const int& w, const int& h, int** const pixel, const int& r) {
+void filter::mosaic_gray(const int& w, const int& h, int** const pixel, const int& r) {
     int sum, count;  // Variables to store the sum of pixel values and the count of pixels in the block.
     // Iterate over the image with steps of size r in both x and y directions.
     for (auto y = 0; y < h; y += r) {
@@ -389,7 +389,7 @@ const void filter::mosaic_gray(const int& w, const int& h, int** const pixel, co
 }
 
 // Applies a mosaic filter to an RGB image by averaging pixel values within non-overlapping square blocks of size r x r for each color channel.
-const void filter::mosaic_RGB(const int& w, const int& h, int*** const pixel, const int& r) {
+void filter::mosaic_RGB(const int& w, const int& h, int*** const pixel, const int& r) {
     int sum[3], count;  // sum[3] stores the sum of pixel values for each color channel (R, G, B).
     // Iterate over the image with steps of size r in both x and y directions.
     for (auto y = 0; y < h; y += r) {
@@ -423,7 +423,7 @@ const void filter::mosaic_RGB(const int& w, const int& h, int*** const pixel, co
 }
 
 // Resizes a grayscale image to new dimensions (nw x nh) using nearest-neighbor interpolation.
-const void filter::resize_gray(int& w, int& h, int*** const pixel, const int& nw, const int& nh) {
+void filter::resize_gray(int& w, int& h, int*** const pixel, const int& nw, const int& nh) {
     double w_scale = static_cast<double>(w) / nw;  // Width scaling factor.
     double h_scale = static_cast<double>(h) / nh;  // Height scaling factor.
     int** resized_pixel = new int*[nh];  // Allocate memory for the resized image.
@@ -460,7 +460,7 @@ const void filter::resize_gray(int& w, int& h, int*** const pixel, const int& nw
 }
 
 // Resizes an RGB image to new dimensions (nw x nh) using nearest-neighbor interpolation.
-const void filter::resize_RGB(int& w, int& h, int**** const pixel, const int& nw, const int& nh) {
+void filter::resize_RGB(int& w, int& h, int**** const pixel, const int& nw, const int& nh) {
     double w_scale = static_cast<double>(w) / nw;  // Width scaling factor.
     double h_scale = static_cast<double>(h) / nh;  // Height scaling factor.
     int*** resized_pixel = new int**[nh];  // Allocate memory for the resized image.
@@ -503,7 +503,7 @@ const void filter::resize_RGB(int& w, int& h, int**** const pixel, const int& nw
 }
 
 // Creates a photo mosaic effect on a grayscale image by replacing each block with a smaller image from a provided list, based on average brightness.
-const void filter::photo_mosaic_gray(const int& w, const int& h, int** pixel, const int& r, const std::vector<std::string>& file_name) {
+void filter::photo_mosaic_gray(const int& w, const int& h, int** pixel, const int& r, const std::vector<std::string>& file_name) {
     std::vector<std::pair<image*, const double*>> gray_image_map;  // Vector to store grayscale images and their average brightness values.
     
     // Load each image from the provided file names, resize it, and calculate its average brightness.
@@ -560,7 +560,7 @@ const void filter::photo_mosaic_gray(const int& w, const int& h, int** pixel, co
 }
 
 // Creates a photo mosaic effect on an RGB image by replacing each block with a smaller image from a provided list, based on average color.
-const void filter::photo_mosaic_RGB(const int& w, const int& h, int*** pixel, const int& r, const std::vector<std::string>& file_name) {
+void filter::photo_mosaic_RGB(const int& w, const int& h, int*** pixel, const int& r, const std::vector<std::string>& file_name) {
     std::vector<std::pair<image*, const double*>> RGB_image_map;  // Vector to store RGB images and their average color values.
     
     // Load each image from the provided file names, resize it, and calculate its average color.

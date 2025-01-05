@@ -1,7 +1,7 @@
 #include "binary_search_tree.h"
 
 // Method to process input commands and output results based on the operation
-const void binary_search_tree::input_operation_and_output_result(std::istream& is, std::ostream& os) {
+void binary_search_tree::input_operation_and_output_result(std::istream& is, std::ostream& os) {
     char command; 
     int parameter, high;
     
@@ -44,7 +44,7 @@ const void binary_search_tree::input_operation_and_output_result(std::istream& i
 }
 
 // Method to search for a specific value in the BST and output the result
-const void binary_search_tree::search_value(std::ostream& os, const int& value) const {
+void binary_search_tree::search_value(std::ostream& os, const int& value) const {
     node* temp = this->root;
     os << "search " << value << ": ";
     
@@ -65,7 +65,7 @@ const void binary_search_tree::search_value(std::ostream& os, const int& value) 
 }
 
 // Method to output the maximum and minimum values in the BST
-const void binary_search_tree::output_max_min(std::ostream& os) const {
+void binary_search_tree::output_max_min(std::ostream& os) const {
     node *max_ptr = this->root, *min_ptr = this->root;
     
     // Find the minimum value
@@ -90,7 +90,7 @@ binary_search_tree::~binary_search_tree() {
 }
 
 // Method to insert a new node with a given value into the BST
-const void binary_search_tree::insert_node(const int& value) {
+void binary_search_tree::insert_node(const int& value) {
     node *n = new node, *temp;
     n->data = value;
     n->left = nullptr;
@@ -127,7 +127,7 @@ const void binary_search_tree::insert_node(const int& value) {
 }
 
 // Recursive method to output nodes within a specified range [low, high]
-const void binary_search_tree::output_range_query(std::ostream& os, const int& low, const int& high, const node* const n) {
+void binary_search_tree::output_range_query(std::ostream& os, const int& low, const int& high, const node* const n) {
     if (n == nullptr) {
         return;
     }
@@ -145,7 +145,7 @@ const void binary_search_tree::output_range_query(std::ostream& os, const int& l
 }
 
 // Recursive method to perform pre-order traversal (Root, Left, Right)
-const void binary_search_tree::recursive_pre_order(std::ostream& os, const node* const n) {
+void binary_search_tree::recursive_pre_order(std::ostream& os, const node* const n) {
     if (n == nullptr) {
         return;
     }
@@ -155,7 +155,7 @@ const void binary_search_tree::recursive_pre_order(std::ostream& os, const node*
 }
 
 // Recursive method to perform in-order traversal (Left, Root, Right)
-const void binary_search_tree::recursive_in_order(std::ostream& os, const node* const n) {
+void binary_search_tree::recursive_in_order(std::ostream& os, const node* const n) {
     if (n == nullptr) {
         return;
     }
@@ -165,7 +165,7 @@ const void binary_search_tree::recursive_in_order(std::ostream& os, const node* 
 }
 
 // Recursive method to perform post-order traversal (Left, Right, Root)
-const void binary_search_tree::recursive_post_order(std::ostream& os, const node* const n) {
+void binary_search_tree::recursive_post_order(std::ostream& os, const node* const n) {
     if (n == nullptr) {
         return;
     }
@@ -175,7 +175,7 @@ const void binary_search_tree::recursive_post_order(std::ostream& os, const node
 }
 
 // Recursive method to delete all nodes in the tree
-const void binary_search_tree::delete_all_node(node* const n) {
+void binary_search_tree::delete_all_node(node* const n) {
     if (n == nullptr) {
         return;
     }

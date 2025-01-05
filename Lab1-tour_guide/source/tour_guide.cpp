@@ -2,7 +2,7 @@
 
 // Method to input the toured track from an input stream
 // Reads the number of steps and their positions, then builds the tour
-const void tour_guide::input_toured_track_and_tour(std::istream& is) {
+void tour_guide::input_toured_track_and_tour(std::istream& is) {
     // Define 8 possible movement directions (like a knight's move in chess)
     const int NUM_DIRECTION = 8;
     const coordinate DIRECTION[NUM_DIRECTION] = {
@@ -100,7 +100,7 @@ const void tour_guide::input_toured_track_and_tour(std::istream& is) {
 
 // Method to output the tour track to an output stream
 // Outputs the x and y coordinates of the tour in order
-const void tour_guide::output_tour_track(std::ostream& os) const {
+void tour_guide::output_tour_track(std::ostream& os) const {
     std::stack<step> temp_stack_a = this->tour_track, temp_stack_b;
 
     // Reverse the stack to output in the correct order

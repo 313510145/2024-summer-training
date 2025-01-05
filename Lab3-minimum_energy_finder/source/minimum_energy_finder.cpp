@@ -2,7 +2,7 @@
 
 // Method to input the item information and calculate the minimum energy
 // Reads the number of items, their weight and time values from the input stream
-const void minimum_energy_finder::input_information_and_calculate(std::istream& is) {
+void minimum_energy_finder::input_information_and_calculate(std::istream& is) {
     unsigned int num_item;
     std::list<item> temp_list;
     
@@ -32,12 +32,12 @@ const void minimum_energy_finder::input_information_and_calculate(std::istream& 
 }
 
 // Method to output the calculated minimum energy to the output stream
-const void minimum_energy_finder::output_minimum_energy(std::ostream& os) const {
+void minimum_energy_finder::output_minimum_energy(std::ostream& os) const {
     os << this->minimum_energy;  // Output the minimum energy
 }
 
 // Method to calculate the minimum energy by iterating over the organized items
-const void minimum_energy_finder::calculate_minimum_energy() {
+void minimum_energy_finder::calculate_minimum_energy() {
     unsigned int total_weight = 0;
     
     // Iterate over items sorted by their weight/time ratio

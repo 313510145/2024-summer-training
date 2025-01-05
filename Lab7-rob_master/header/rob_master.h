@@ -13,10 +13,10 @@ struct house {
 class rob_master {
     public:
         // Reads input information and calculates the maximum money collectible for each house
-        const void input_information_and_calculate(std::istream& is);
+        void input_information_and_calculate(std::istream& is);
         
         // Outputs the maximum amount collectible across the entire community
-        const void output_maximum_amount(std::ostream& os) const;
+        void output_maximum_amount(std::ostream& os) const;
         
         // Constructor
         rob_master();

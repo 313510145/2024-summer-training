@@ -15,7 +15,7 @@ const int8_t BOX           = 0b00000001,  // Apply box filter
              PHOTO_MOSAIC  = 0b00100000;  // Apply photo mosaic effect
 
 // Function to apply selected image processing operations
-const void load_case(image* const i, const int8_t& option) {
+void load_case(image* const i, const int8_t& option) {
     // Apply box filter if BOX option is set
     if (option & BOX) {
         i->box(15);

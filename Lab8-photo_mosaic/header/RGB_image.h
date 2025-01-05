@@ -7,43 +7,43 @@
 class RGB_image: public image {
     public:
         // Load an image from a file and initialize the pixel data
-        virtual const bool load_image(const std::string& file_name) override;
+        virtual bool load_image(const std::string& file_name) override;
 
         // Save the current image to a file
-        virtual const void dump_image(const std::string& file_name) const override;
+        virtual void dump_image(const std::string& file_name) const override;
 
         // Apply a box filter to the image with radius 'r'
-        virtual const void box(const int& r) override;
+        virtual void box(const int& r) override;
 
         // Apply the Sobel edge detection algorithm
-        virtual const void sobel() override;
+        virtual void sobel() override;
 
         // Normalize the image colors
-        virtual const void normalization() override;
+        virtual void normalization() override;
 
         // Apply a mosaic effect to the image with radius 'r'
-        virtual const void mosaic(const int& r) override;
+        virtual void mosaic(const int& r) override;
 
         // Resize the image to new width 'nw' and height 'nh'
-        virtual const void resize(const int& nw, const int& nh) override;
+        virtual void resize(const int& nw, const int& nh) override;
 
         // Create a photo mosaic from a set of images with radius 'r'
-        virtual const void photo_mosaic(const int& r) override;
+        virtual void photo_mosaic(const int& r) override;
 
         // Display the image on an X server
-        virtual const void display_X_server() const override;
+        virtual void display_X_server() const override;
 
         // Display the image in ASCII art format
-        virtual const void display_ASCII() const override;
+        virtual void display_ASCII() const override;
 
         // Display the image on the command line
-        virtual const void display_command_line() const override;
+        virtual void display_command_line() const override;
 
         // Calculate and return the average color values of the image
-        virtual const double* const get_average() const override;
+        virtual double* get_average() const override;
 
         // Assign a portion of this image's pixel data to another pixel array
-        virtual const void assign_to(int*** const pixel, const int& px, const int& py, const int& w, const int& h) const override;
+        virtual void assign_to(int*** const pixel, const int& px, const int& py, const int& w, const int& h) const override;
 
         // Default constructor
         RGB_image();

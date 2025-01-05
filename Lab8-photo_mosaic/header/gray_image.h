@@ -7,31 +7,31 @@
 class gray_image: public image {
     public:
         // Load grayscale image from a file
-        virtual const bool load_image(const std::string& file_name) override;
+        virtual bool load_image(const std::string& file_name) override;
         // Save grayscale image to a file
-        virtual const void dump_image(const std::string& file_name) const override;
+        virtual void dump_image(const std::string& file_name) const override;
         // Apply a box filter with radius r
-        virtual const void box(const int& r) override;
+        virtual void box(const int& r) override;
         // Apply Sobel edge detection filter
-        virtual const void sobel() override;
+        virtual void sobel() override;
         // Normalize the grayscale image
-        virtual const void normalization() override;
+        virtual void normalization() override;
         // Apply mosaic effect with radius r
-        virtual const void mosaic(const int& r) override;
+        virtual void mosaic(const int& r) override;
         // Resize the grayscale image to new width (nw) and height (nh)
-        virtual const void resize(const int& nw, const int& nh) override;
+        virtual void resize(const int& nw, const int& nh) override;
         // Apply photo mosaic effect with radius r
-        virtual const void photo_mosaic(const int& r) override;
+        virtual void photo_mosaic(const int& r) override;
         // Display grayscale image using X server
-        virtual const void display_X_server() const override;
+        virtual void display_X_server() const override;
         // Display grayscale image as ASCII art
-        virtual const void display_ASCII() const override;
+        virtual void display_ASCII() const override;
         // Display grayscale image using command-line tools
-        virtual const void display_command_line() const override;
+        virtual void display_command_line() const override;
         // Get average pixel value of the grayscale image
-        virtual const double* const get_average() const override;
+        virtual double* get_average() const override;
         // Assign pixel data from another image to this image
-        virtual const void assign_to(int*** const pixel, const int& px, const int& py, const int& w, const int& h) const override;
+        virtual void assign_to(int*** const pixel, const int& px, const int& py, const int& w, const int& h) const override;
         
         // Default constructor
         gray_image();

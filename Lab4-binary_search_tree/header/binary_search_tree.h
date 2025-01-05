@@ -15,13 +15,13 @@ struct node {
 class binary_search_tree {
     public:
         // Method to input commands and produce the corresponding output
-        const void input_operation_and_output_result(std::istream& is, std::ostream& os);
+        void input_operation_and_output_result(std::istream& is, std::ostream& os);
         
         // Method to search for a specific value in the BST
-        const void search_value(std::ostream& os, const int& value) const;
+        void search_value(std::ostream& os, const int& value) const;
         
         // Method to output the maximum and minimum values in the BST
-        const void output_max_min(std::ostream& os) const;
+        void output_max_min(std::ostream& os) const;
         
         // Constructor to initialize the BST
         binary_search_tree();
@@ -33,22 +33,22 @@ class binary_search_tree {
         node* root;  // Pointer to the root node of the BST
         
         // Method to insert a new node into the BST
-        const void insert_node(const int& value);
+        void insert_node(const int& value);
         
         // Static method to output nodes within a specified range
-        static const void output_range_query(std::ostream& os, const int& low, const int& high, const node* const n);
+        static void output_range_query(std::ostream& os, const int& low, const int& high, const node* const n);
         
         // Static method to recursively perform pre-order traversal
-        static const void recursive_pre_order(std::ostream& os, const node* const n);
+        static void recursive_pre_order(std::ostream& os, const node* const n);
         
         // Static method to recursively perform in-order traversal
-        static const void recursive_in_order(std::ostream& os, const node* const n);
+        static void recursive_in_order(std::ostream& os, const node* const n);
         
         // Static method to recursively perform post-order traversal
-        static const void recursive_post_order(std::ostream& os, const node* const n);
+        static void recursive_post_order(std::ostream& os, const node* const n);
         
         // Method to recursively delete all nodes in the BST
-        static const void delete_all_node(node* const n);
+        static void delete_all_node(node* const n);
 };
 
 #endif  // BINARY_SEARCH_TREE_H

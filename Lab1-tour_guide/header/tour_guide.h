@@ -19,10 +19,10 @@ struct step {
 class tour_guide {
     public:
         // Method to input the toured track from a stream
-        const void input_toured_track_and_tour(std::istream& is);
+        void input_toured_track_and_tour(std::istream& is);
         
         // Method to output the tour track to a stream
-        const void output_tour_track(std::ostream& os) const;
+        void output_tour_track(std::ostream& os) const;
         
         // Constructor to initialize the tour guide with a map size
         tour_guide();

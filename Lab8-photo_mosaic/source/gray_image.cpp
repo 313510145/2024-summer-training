@@ -1,7 +1,7 @@
 #include "gray_image.h"
 
 // Load a grayscale image from a file
-const bool gray_image::load_image(const std::string& file_name) {
+bool gray_image::load_image(const std::string& file_name) {
     this->pixel = this->il.load_gray(file_name, &this->width, &this->height);
     if (this->pixel == nullptr) {
         return false;  // Failed to load image
@@ -10,37 +10,37 @@ const bool gray_image::load_image(const std::string& file_name) {
 }
 
 // Save the grayscale image to a file
-const void gray_image::dump_image(const std::string& file_name) const {
+void gray_image::dump_image(const std::string& file_name) const {
     this->il.dump_gray(this->width, this->height, this->pixel, file_name);
 }
 
 // Apply a box filter to the grayscale image
-const void gray_image::box(const int& r) {
+void gray_image::box(const int& r) {
     this->f.box_gray(this->width, this->height, this->pixel, r);
 }
 
 // Apply Sobel edge detection to the grayscale image
-const void gray_image::sobel() {
+void gray_image::sobel() {
     this->f.sobel_gray(this->width, this->height, this->pixel);
 }
 
 // Normalize the grayscale image
-const void gray_image::normalization() {
+void gray_image::normalization() {
     this->f.normalization_gray(this->width, this->height, this->pixel);
 }
 
 // Apply mosaic effect to the grayscale image
-const void gray_image::mosaic(const int& r) {
+void gray_image::mosaic(const int& r) {
     this->f.mosaic_gray(this->width, this->height, this->pixel, r);
 }
 
 // Resize the grayscale image
-const void gray_image::resize(const int& nw, const int& nh) {
+void gray_image::resize(const int& nw, const int& nh) {
     this->f.resize_gray(this->width, this->height, &this->pixel, nw, nh);
 }
 
 // Apply photo mosaic effect to the grayscale image
-const void gray_image::photo_mosaic(const int& r) {
+void gray_image::photo_mosaic(const int& r) {
     std::vector<std::string> file_name;
     this->il.list_directory("image/cifar10", file_name);  // List files for photo mosaic
     this->f.photo_mosaic_gray(this->width, this->height, this->pixel, r, file_name);
@@ -48,23 +48,23 @@ const void gray_image::photo_mosaic(const int& r) {
 }
 
 // Display the grayscale image using X server
-const void gray_image::display_X_server() const {
+void gray_image::display_X_server() const {
     this->il.display_gray_X_server(this->width, this->height, this->pixel);
 }
 
 // Display the grayscale image as ASCII art
-const void gray_image::display_ASCII() const {
+void gray_image::display_ASCII() const {
     this->il.display_gray_ASCII(this->width, this->height, this->pixel);
 }
 
 // Display the grayscale image using command-line tools
-const void gray_image::display_command_line() const {
+void gray_image::display_command_line() const {
     this->il.dump_gray(this->width, this->height, this->pixel, "gray_image.jpg");
     this->il.display_command_line("gray_image.jpg");
 }
 
 // Calculate and return the average pixel value of the grayscale image
-const double* const gray_image::get_average() const {
+double* gray_image::get_average() const {
     double* average = new double(0);  // Initialize average to 0
     for (auto y = 0; y < this->height; y++) {
         for (auto x = 0; x < this->width; x++) {
@@ -76,7 +76,7 @@ const double* const gray_image::get_average() const {
 }
 
 // Assign pixel data from another image to this image
-const void gray_image::assign_to(int*** const pixel, const int& px, const int& py, const int& w, const int& h) const {
+void gray_image::assign_to(int*** const pixel, const int& px, const int& py, const int& w, const int& h) const {
     int w_here = (w > this->width) ? this->width : w;
     int h_here = (h > this->height) ? this->height : h;
     for (auto y = 0; y < h_here; y++) {
@@ -101,9 +101,7 @@ gray_image::gray_image(const int& w, const int& h, const int** const p): image(w
 }
 
 // Copy constructor
-gray_image::gray_image(const gray_image& gi) {
-    this->width = gi.width;
-    this->height = gi.height;
+gray_image::gray_image(const gray_image& gi): image(gi.width, gi.height) {
     this->pixel = new int*[this->height];
     for (auto y = 0; y < this->height; y++) {
         this->pixel[y] = new int[this->width];

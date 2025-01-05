@@ -2,7 +2,7 @@
 #include <unordered_set>
 
 // Processes commands from input and outputs results
-const void linked_list::input_operation_and_output_result(std::istream& is, std::ostream& os) {
+void linked_list::input_operation_and_output_result(std::istream& is, std::ostream& os) {
     char command;  // Command character
     int parameter; // Parameter for the command
     
@@ -35,7 +35,7 @@ const void linked_list::input_operation_and_output_result(std::istream& is, std:
 }
 
 // Outputs the current state of the linked list
-const void linked_list::output_list(std::ostream& os) const {
+void linked_list::output_list(std::ostream& os) const {
     node* temp = this->head; // Start from the head
     while (temp != nullptr) { // Traverse the list
         os << temp->data << " "; // Print data
@@ -53,7 +53,7 @@ linked_list::~linked_list() {
 }
 
 // Inserts a value at the beginning of the list
-const void linked_list::insert_at_beginning(const int& value) {
+void linked_list::insert_at_beginning(const int& value) {
     node* n = new node; // Create a new node
     n->data = value; // Set the node's data
     n->next = this->head; // Point to the current head
@@ -61,7 +61,7 @@ const void linked_list::insert_at_beginning(const int& value) {
 }
 
 // Inserts a value at the end of the list
-const void linked_list::insert_at_end(const int& value) {
+void linked_list::insert_at_end(const int& value) {
     node *n = new node, *end; // Create a new node
     n->data = value; // Set the node's data
     n->next = nullptr; // New node is the last node
@@ -78,7 +78,7 @@ const void linked_list::insert_at_end(const int& value) {
 }
 
 // Deletes nodes with a specific value
-const void linked_list::delete_by_value(const int& value) {
+void linked_list::delete_by_value(const int& value) {
     node *previous = nullptr, *current = this->head, *next;
     
     while (current != nullptr) {
@@ -99,7 +99,7 @@ const void linked_list::delete_by_value(const int& value) {
 }
 
 // Reverses the linked list
-const void linked_list::reverse_list() {
+void linked_list::reverse_list() {
     node *previous = nullptr, *current = this->head, *next;
     
     while (current != nullptr) {
@@ -112,7 +112,7 @@ const void linked_list::reverse_list() {
 }
 
 // Removes duplicate values from the list
-const void linked_list::remove_duplicate() {
+void linked_list::remove_duplicate() {
     std::unordered_set<int> s; // Set to track seen values
     node *temp_node = this->head, *first = nullptr, *tail = nullptr;
     
@@ -137,7 +137,7 @@ const void linked_list::remove_duplicate() {
 }
 
 // Deletes all nodes in the linked list
-const void linked_list::delete_all_node() {
+void linked_list::delete_all_node() {
     while (this->head != nullptr) {
         node* temp = this->head; // Save the head node
         this->head = this->head->next; // Move head forward

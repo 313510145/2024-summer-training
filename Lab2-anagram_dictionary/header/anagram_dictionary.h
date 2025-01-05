@@ -10,10 +10,10 @@
 class anagram_dictionary {
     public:
         // Method to input strings, group them into anagrams, and store them
-        const void input_string_and_group(std::istream& is);
+        void input_string_and_group(std::istream& is);
         
         // Method to output the grouped anagrams
-        const void output_group(std::ostream& os) const;
+        void output_group(std::ostream& os) const;
         
         // Constructor to initialize the dictionary
         anagram_dictionary();
