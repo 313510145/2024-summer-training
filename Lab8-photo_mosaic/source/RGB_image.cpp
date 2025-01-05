@@ -39,7 +39,7 @@ void RGB_image::resize(const int& nw, const int& nh) {
 // Create a photo mosaic from a directory of images with radius 'r'
 void RGB_image::photo_mosaic(const int& r) {
     std::vector<std::string> file_name;
-    this->il.list_directory("image/cifar10", file_name);
+    assert(this->il.list_directory("image/cifar10", file_name));
     this->f.photo_mosaic_RGB(this->width, this->height, this->pixel, r, file_name);
     file_name.clear();
 }

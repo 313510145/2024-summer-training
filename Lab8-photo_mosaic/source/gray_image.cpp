@@ -42,7 +42,7 @@ void gray_image::resize(const int& nw, const int& nh) {
 // Apply photo mosaic effect to the grayscale image
 void gray_image::photo_mosaic(const int& r) {
     std::vector<std::string> file_name;
-    this->il.list_directory("image/cifar10", file_name);  // List files for photo mosaic
+    assert(this->il.list_directory("image/cifar10", file_name));  // List files for photo mosaic
     this->f.photo_mosaic_gray(this->width, this->height, this->pixel, r, file_name);
     file_name.clear();  // Clear the list of file names
 }
