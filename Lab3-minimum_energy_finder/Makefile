@@ -35,9 +35,9 @@ TESTCASE = $(wildcard $(TESTCASE_DIRECTORY)/*)
 
 # Define the target executable, case generator, number of cases, and golden generator
 TARGET = Lab3
-CASE_GENERATOR = $(SCRIPT_DIRECTORY)/case_generate
+CASE_GENERATOR = $(SCRIPT_DIRECTORY)/case_generator
 NUM_CASE = 10
-GOLDEN_GENERATOR = $(SCRIPT_DIRECTORY)/golden_generate
+GOLDEN_GENERATOR = $(SCRIPT_DIRECTORY)/golden_generator
 
 # Default target to build the project
 all: $(TARGET)

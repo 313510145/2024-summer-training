@@ -33,7 +33,7 @@ TESTCASE = $(wildcard testcase/*)
 
 # Define target executable and generator script
 TARGET = Lab2
-GENERATOR = script/golden_generate
+GENERATOR = script/golden_generator
 
 # Default target to build the project
 all: $(TARGET)

@@ -33,7 +33,7 @@ TESTCASE = $(wildcard testcase/*)
 
 # Define the target executable and the golden file generator script
 TARGET = Lab7
-GENERATOR = script/golden_generate
+GENERATOR = script/golden_generator
 
 # Default target to build the project
 all: $(TARGET)
