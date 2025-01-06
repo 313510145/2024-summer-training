@@ -28,6 +28,7 @@ SOURCE_DIRECTORY = source
 # File lists
 SOURCE = $(wildcard $(SOURCE_DIRECTORY)/*.cpp)
 OBJECT = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.o, $(SOURCE))
+DEPENDENCY = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.d, $(SOURCE))
 TARGET = Lab8
 INPUT_IMAGE = image/owl.jpg
 
@@ -51,9 +52,12 @@ $(LIBRARY_DIRECTORY):
 $(TARGET): main.cpp $(OBJECT)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) $(OPTIMIZATION_FLAG) $^ -o $@ $(LINKER)
 
-# Compile source files into object files
+# Include dependency files to track header dependencies and ensure automatic recompilation when headers change.  
+-include $(DEPENDENCY)
+
+# Compile each source file (*.cpp) into an object file (*.o) with dependency generation (-MMD), ensuring the output is stored in the object directory.  
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
-	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) $(OPTIMIZATION_FLAG) -c $< -o $@
+	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -MMD -c $< -o $@
 
 # Run static code analysis with cppcheck
 check: $(CPPCHECK)

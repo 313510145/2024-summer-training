@@ -22,9 +22,12 @@ VERIFICATION_DIRECTORY = verification
 SOURCE_DIRECTORY = source
 TESTCASE_DIRECTORY = testcase
 
-# Source and object file definitions
+# Define the lists of source files, object files, and dependency files with paths mapped between source and object directories.  
 SOURCE = $(wildcard $(SOURCE_DIRECTORY)/*.cpp)
 OBJECT = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.o, $(SOURCE))
+DEPENDENCY = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.d, $(SOURCE))
+
+# Define test case input files
 TESTCASE = $(wildcard $(TESTCASE_DIRECTORY)/verilog/*)
 
 # Main executable target and library dependencies
@@ -57,9 +60,12 @@ $(LIBRARY_DIRECTORY):
 $(TARGET): main.cpp $(OBJECT)
 	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) $^ -o $@
 
-# Compile individual source files into object files
+# Include dependency files to track header dependencies and ensure automatic recompilation when headers change.  
+-include $(DEPENDENCY)
+
+# Compile each source file (*.cpp) into an object file (*.o) with dependency generation (-MMD), ensuring the output is stored in the object directory.  
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
-	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -c $< -o $@
+	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -MMD -c $< -o $@
 
 # Check code quality using cppcheck
 check: $(CPPCHECK)
