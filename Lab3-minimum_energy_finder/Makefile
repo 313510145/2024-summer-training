@@ -102,6 +102,6 @@ generate: $(GENERATOR) | $(GOLDEN_DIRECTORY)
 		./$(GENERATOR) "$$testcase" $(GOLDEN_DIRECTORY)/"$$testcase_base".gold; \
 	done
 
-# Clean up all generated files, including test cases 3 to NUM_CASE
+# Clean up all generated files
 clean:
 	rm -rf $(TARGET) $(GOLDEN_DIRECTORY) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(VERIFICATION_DIRECTORY)
