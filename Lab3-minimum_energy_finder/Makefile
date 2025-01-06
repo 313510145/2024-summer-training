@@ -1,5 +1,5 @@
 # Define phony targets, which represent commands rather than files
-.PHONY: all check verify run run_valgrind case_generate clean
+.PHONY: all check verify run run_valgrind generate clean
 
 # Set the compiler and its flags
 CXX = g++
@@ -21,10 +21,8 @@ OBJECT_DIRECTORY = object
 OUTPUT_DIRECTORY = output
 VERIFICATION_DIRECTORY = verification
 
-# Directories for scripts, source files, and test cases
-SCRIPT_DIRECTORY = script
+# Directory for source files
 SOURCE_DIRECTORY = source
-TESTCASE_DIRECTORY = testcase
 
 # Define the lists of source files, object files, and dependency files with paths mapped between source and object directories.  
 SOURCE = $(wildcard $(SOURCE_DIRECTORY)/*.cpp)
@@ -32,13 +30,11 @@ OBJECT = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.o, $(SOURCE
 DEPENDENCY = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.d, $(SOURCE))
 
 # Define test case input files
-TESTCASE = $(wildcard $(TESTCASE_DIRECTORY)/*)
+TESTCASE = $(wildcard testcase/*)
 
-# Define the target executable, case generator, number of cases, and golden generator
+# Define the target executable and golden generator
 TARGET = Lab3
-CASE_GENERATOR = $(SCRIPT_DIRECTORY)/case_generator
-NUM_CASE = 10
-GOLDEN_GENERATOR = $(SCRIPT_DIRECTORY)/golden_generator
+GENERATOR = script/golden_generator
 
 # Default target to build the project
 all: $(TARGET)
@@ -75,7 +71,7 @@ check: $(CPPCHECK)
 	./$(CPPCHECK) $(CPPCHECK_FLAG) $(INCLUDE_PATH) .
 
 # Verify program output against golden reference files
-verify: run golden_generate | $(VERIFICATION_DIRECTORY)
+verify: run generate | $(VERIFICATION_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
@@ -83,7 +79,7 @@ verify: run golden_generate | $(VERIFICATION_DIRECTORY)
 	done
 
 # Run the program and generate output for each test case
-run: $(TARGET) case_generate | $(OUTPUT_DIRECTORY)
+run: $(TARGET) | $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
@@ -91,32 +87,21 @@ run: $(TARGET) case_generate | $(OUTPUT_DIRECTORY)
 	done
 
 # Run the program with valgrind and generate output for each test case
-run_valgrind: $(TARGET) case_generate | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
+run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
 		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/"$$testcase_base.log" ./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
 	done
 
-# Generate test cases from 3 to NUM_CASE using the case generator script
-case_generate: $(CASE_GENERATOR)
-	((i = 3)); while [ $$i -le $(NUM_CASE) ]; do \
-		./$(CASE_GENERATOR) testcase/"$$i".in; \
-		((i = i + 1)); \
-	done
-
 # Generate golden output for each test case using the golden generator script
-golden_generate: $(GOLDEN_GENERATOR) | $(GOLDEN_DIRECTORY)
+generate: $(GENERATOR) | $(GOLDEN_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		testcase_base=$$(basename "$$testcase"); \
 		testcase_base=$${testcase_base%.*}; \
-		./$(GOLDEN_GENERATOR) "$$testcase" $(GOLDEN_DIRECTORY)/"$$testcase_base".gold; \
+		./$(GENERATOR) "$$testcase" $(GOLDEN_DIRECTORY)/"$$testcase_base".gold; \
 	done
 
 # Clean up all generated files, including test cases 3 to NUM_CASE
 clean:
 	rm -rf $(TARGET) $(GOLDEN_DIRECTORY) $(MEMORY_DIRECTORY) $(OBJECT_DIRECTORY) $(OUTPUT_DIRECTORY) $(VERIFICATION_DIRECTORY)
-	((i = 3)); while [ $$i -le $(NUM_CASE) ]; do \
-		rm -rf $(TESTCASE_DIRECTORY)/"$$i".in; \
-		((i = i + 1)); \
-	done
