@@ -193,7 +193,7 @@ void quine_mccluskey::levelization() {
             if (g->get_count() == g->get_fan_in_num()) {
                 // Set the level of gates connected to PIs
                 i->get_fan_out(j)->set_level(1);
-                q.push(i->get_fan_out(j));
+                q.push(g);
             }
         }
     }
