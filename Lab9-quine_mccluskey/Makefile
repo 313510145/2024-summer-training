@@ -30,6 +30,12 @@ DEPENDENCY = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.d, $(SO
 # Define test case input files
 TESTCASE = $(wildcard $(TESTCASE_DIRECTORY)/verilog/*)
 
+# Define common testcase base transformation
+define GET_TESTCASE_BASE
+testcase_base=$$(basename $$testcase); \
+testcase_base=$${testcase_base%.*}
+endef
+
 # Main executable target and library dependencies
 TARGET = Lab9
 ABC = $(LIBRARY_DIRECTORY)/abc/abc
@@ -74,36 +80,32 @@ check: $(CPPCHECK)
 # Verify results by comparing outputs with golden references
 verify: run generate $(ABC) | $(VERIFICATION_DIRECTORY)
 	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		./$(ABC) -c "cec $(OUTPUT_DIRECTORY)/"$$testcase_base".blif $(TESTCASE_DIRECTORY)/blif/"$$testcase_base".blif" | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".equiv; \
-		./$(ABC) -c "read_blif $(OUTPUT_DIRECTORY)/"$$testcase_base".blif; st; ps;" | tee $(OUTPUT_DIRECTORY)/"$$testcase_base".size; \
-		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".size $(GOLDEN_DIRECTORY)/"$$testcase_base".size | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".size; \
+		$(GET_TESTCASE_BASE); \
+		./$(ABC) -c "cec $(OUTPUT_DIRECTORY)/$${testcase_base}.blif $(TESTCASE_DIRECTORY)/blif/$${testcase_base}.blif" | tee $(VERIFICATION_DIRECTORY)/$${testcase_base}.equiv; \
+		./$(ABC) -c "read_blif $(OUTPUT_DIRECTORY)/$${testcase_base}.blif; st; ps;" | tee $(OUTPUT_DIRECTORY)/$${testcase_base}.size; \
+		diff $(OUTPUT_DIRECTORY)/$${testcase_base}.size $(GOLDEN_DIRECTORY)/$${testcase_base}.size | tee $(VERIFICATION_DIRECTORY)/$${testcase_base}.size; \
 	done
 	rm -rf abc.history
 
 # Run the main executable with testcases
 run: $(TARGET) | $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".blif; \
+		$(GET_TESTCASE_BASE); \
+		./$(TARGET) $$testcase $(OUTPUT_DIRECTORY)/$${testcase_base}.blif; \
 	done
 
 # Run the main executable with Valgrind for memory checking
 run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/"$$testcase_base.log" ./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".blif; \
+		$(GET_TESTCASE_BASE); \
+		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/$${testcase_base}.log ./$(TARGET) $$testcase $(OUTPUT_DIRECTORY)/$${testcase_base}.blif; \
 	done
 
 # Generate golden reference outputs using ABC tool
 generate: $(ABC) | $(GOLDEN_DIRECTORY)
 	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		./$(ABC) -c "read_blif $(TESTCASE_DIRECTORY)/blif/"$$testcase_base".blif; st; ps;" | tee $(GOLDEN_DIRECTORY)/"$$testcase_base".size; \
+		$(GET_TESTCASE_BASE); \
+		./$(ABC) -c "read_blif $(TESTCASE_DIRECTORY)/blif/$${testcase_base}.blif; st; ps;" | tee $(GOLDEN_DIRECTORY)/$${testcase_base}.size; \
 	done
 	rm -rf abc.history
 

@@ -32,6 +32,12 @@ DEPENDENCY = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.d, $(SO
 # Define test case input files
 TESTCASE = $(wildcard testcase/*)
 
+# Define common testcase base transformation
+define GET_TESTCASE_BASE
+testcase_base=$$(basename $$testcase); \
+testcase_base=$${testcase_base%.*}
+endef
+
 # Define the target executable and golden generator
 TARGET = Lab3
 GENERATOR = script/golden_generator
@@ -73,33 +79,29 @@ check: $(CPPCHECK)
 # Verify program output against golden reference files
 verify: run generate | $(VERIFICATION_DIRECTORY)
 	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		diff $(OUTPUT_DIRECTORY)/"$$testcase_base".out $(GOLDEN_DIRECTORY)/"$$testcase_base".gold | tee $(VERIFICATION_DIRECTORY)/"$$testcase_base".log; \
+		$(GET_TESTCASE_BASE); \
+		diff $(OUTPUT_DIRECTORY)/$${testcase_base}.out $(GOLDEN_DIRECTORY)/$${testcase_base}.gold | tee $(VERIFICATION_DIRECTORY)/$${testcase_base}.log; \
 	done
 
 # Run the program and generate output for each test case
 run: $(TARGET) | $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
+		$(GET_TESTCASE_BASE); \
+		./$(TARGET) $$testcase $(OUTPUT_DIRECTORY)/$${testcase_base}.out; \
 	done
 
 # Run the program with valgrind and generate output for each test case
 run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/"$$testcase_base.log" ./$(TARGET) "$$testcase" $(OUTPUT_DIRECTORY)/"$$testcase_base".out; \
+		$(GET_TESTCASE_BASE); \
+		$(CHECKCC) $(CHECKCC_FLAG) --log-file=$(MEMORY_DIRECTORY)/$${testcase_base}.log ./$(TARGET) $$testcase $(OUTPUT_DIRECTORY)/$${testcase_base}.out; \
 	done
 
 # Generate golden output for each test case using the golden generator script
 generate: $(GENERATOR) | $(GOLDEN_DIRECTORY)
 	for testcase in $(TESTCASE); do \
-		testcase_base=$$(basename "$$testcase"); \
-		testcase_base=$${testcase_base%.*}; \
-		./$(GENERATOR) "$$testcase" $(GOLDEN_DIRECTORY)/"$$testcase_base".gold; \
+		$(GET_TESTCASE_BASE); \
+		./$(GENERATOR) $$testcase $(GOLDEN_DIRECTORY)/$${testcase_base}.gold; \
 	done
 
 # Clean up all generated files
