@@ -15,7 +15,7 @@ class image {
         virtual void normalization() = 0;  // Normalize the image
         virtual void mosaic(const int& r) = 0;  // Apply a mosaic effect with radius r
         virtual void resize(const int& nw, const int& nh) = 0;  // Resize the image to new width (nw) and height (nh)
-        virtual void photo_mosaic(const int& r) = 0;  // Apply a photo mosaic effect with radius r
+        virtual void photo_mosaic(const std::string& i, const int& r) = 0;  // Apply a photo mosaic effect with images i and radius r
         virtual void display_X_server() const = 0;  // Display the image in an X server window
         virtual void display_ASCII() const = 0;  // Display the image as ASCII art
         virtual void display_command_line() const = 0;  // Display the image using command-line tools

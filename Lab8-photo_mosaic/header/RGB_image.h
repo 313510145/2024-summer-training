@@ -27,8 +27,8 @@ class RGB_image: public image {
         // Resize the image to new width 'nw' and height 'nh'
         virtual void resize(const int& nw, const int& nh) override;
 
-        // Create a photo mosaic from a set of images with radius 'r'
-        virtual void photo_mosaic(const int& r) override;
+        // Create a photo mosaic from a set of images 'i' with radius 'r'
+        virtual void photo_mosaic(const std::string& i, const int& r) override;
 
         // Display the image on an X server
         virtual void display_X_server() const override;

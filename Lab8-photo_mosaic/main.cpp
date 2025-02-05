@@ -38,7 +38,7 @@ void load_case(image* const i, const int8_t& option) {
     }
     // Apply photo mosaic effect if PHOTO_MOSAIC option is set
     if (option & PHOTO_MOSAIC) {
-        i->photo_mosaic(32);
+        i->photo_mosaic("image/cifar10", 32);
     }
 }
 
