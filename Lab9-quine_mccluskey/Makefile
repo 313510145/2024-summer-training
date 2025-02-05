@@ -21,6 +21,8 @@ LIBRARY_DIRECTORY = library
 VERIFICATION_DIRECTORY = verification
 SOURCE_DIRECTORY = source
 TESTCASE_DIRECTORY = testcase
+TESTCASE_VERILOG_DIRECTORY = $(TESTCASE_DIRECTORY)/verilog
+TESTCASE_BLIF_DIRECTORY = $(TESTCASE_DIRECTORY)/blif
 
 # Define the lists of source files, object files, and dependency files with paths mapped between source and object directories.  
 SOURCE = $(wildcard $(SOURCE_DIRECTORY)/*.cpp)
@@ -28,7 +30,7 @@ OBJECT = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.o, $(SOURCE
 DEPENDENCY = $(patsubst $(SOURCE_DIRECTORY)/%.cpp, $(OBJECT_DIRECTORY)/%.d, $(SOURCE))
 
 # Define test case input files
-TESTCASE = $(wildcard $(TESTCASE_DIRECTORY)/verilog/*)
+TESTCASE = $(wildcard $(TESTCASE_VERILOG_DIRECTORY)/*)
 
 # Define common testcase base transformation
 define GET_TESTCASE_BASE
@@ -81,7 +83,7 @@ check: $(CPPCHECK)
 verify: run generate $(ABC) | $(VERIFICATION_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		$(GET_TESTCASE_BASE); \
-		./$(ABC) -c "cec $(OUTPUT_DIRECTORY)/$${testcase_base}.blif $(TESTCASE_DIRECTORY)/blif/$${testcase_base}.blif" | tee $(VERIFICATION_DIRECTORY)/$${testcase_base}.equiv; \
+		./$(ABC) -c "cec $(OUTPUT_DIRECTORY)/$${testcase_base}.blif $(TESTCASE_BLIF_DIRECTORY)/$${testcase_base}.blif" | tee $(VERIFICATION_DIRECTORY)/$${testcase_base}.equiv; \
 		./$(ABC) -c "read_blif $(OUTPUT_DIRECTORY)/$${testcase_base}.blif; st; ps;" | tee $(OUTPUT_DIRECTORY)/$${testcase_base}.size; \
 		diff $(OUTPUT_DIRECTORY)/$${testcase_base}.size $(GOLDEN_DIRECTORY)/$${testcase_base}.size | tee $(VERIFICATION_DIRECTORY)/$${testcase_base}.size; \
 	done
@@ -105,7 +107,7 @@ run_valgrind: $(TARGET) | $(MEMORY_DIRECTORY) $(OUTPUT_DIRECTORY)
 generate: $(ABC) | $(GOLDEN_DIRECTORY)
 	for testcase in $(TESTCASE); do \
 		$(GET_TESTCASE_BASE); \
-		./$(ABC) -c "read_blif $(TESTCASE_DIRECTORY)/blif/$${testcase_base}.blif; st; ps;" | tee $(GOLDEN_DIRECTORY)/$${testcase_base}.size; \
+		./$(ABC) -c "read_blif $(TESTCASE_BLIF_DIRECTORY)/$${testcase_base}.blif; st; ps;" | tee $(GOLDEN_DIRECTORY)/$${testcase_base}.size; \
 	done
 	rm -rf abc.history
 
