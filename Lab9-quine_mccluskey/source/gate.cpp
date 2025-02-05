@@ -98,12 +98,6 @@ bool gate::is_inverted() const {
     return false;
 }
 
-// Clear the input and output lists
-void gate::clear_list() {
-    this->input_list.clear();
-    this->output_list.clear();
-}
-
 // Constructor: Initialize default values
 gate::gate() {
     this->name = "";

@@ -175,7 +175,6 @@ quine_mccluskey::~quine_mccluskey() {
     this->PI_list.clear();
     this->PO_list.clear();
     for (auto i: this->netlist) {
-        i->clear_list();
         delete i;
     }
     this->netlist.clear();

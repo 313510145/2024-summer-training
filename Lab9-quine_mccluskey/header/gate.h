@@ -45,7 +45,6 @@ class gate {
 
         // Utilities
         bool is_inverted() const;
-        void clear_list();
 
         // Constructor and destructor
         gate();
