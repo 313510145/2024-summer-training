@@ -3,7 +3,7 @@
 
 # Compiler and flags for C++ source code
 CXX = g++
-CXX_FLAG = -Wall -Wextra -std=c++11 -g
+CXX_FLAG = -Wall -Wextra -std=c++14 -g -static
 INCLUDE_PATH = -Iheader
 
 # Tools and their configurations for checking memory leaks and code quality

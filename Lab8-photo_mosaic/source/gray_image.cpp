@@ -1,4 +1,5 @@
 #include "gray_image.h"
+#include <cassert>
 
 // Load a grayscale image from a file
 bool gray_image::load_image(const std::string& file_name) {

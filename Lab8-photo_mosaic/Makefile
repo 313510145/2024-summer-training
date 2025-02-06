@@ -3,12 +3,12 @@
 
 # Compiler and flags
 CXX = g++
-CXX_FLAG = -Wall -Wextra -std=c++11 -g
+CXX_FLAG = -Wall -Wextra -std=c++14 -g
 INCLUDE_PATH = -Iheader -Ilibrary/CImg -Ilibrary/libjpeg
-OPTIMIZATION_FLAG = -pthread -flto -funroll-loops -finline-functions -ffast-math -O3
+OPTIMIZATION_FLAG = -march=native -pthread -flto -funroll-loops -finline-functions -ffast-math -O3
 
 # Linker flags
-LINKER = -lpthread -lX11 -Llibrary/libjpeg -ljpeg -lpng
+LINKER = -lX11 -Llibrary/libjpeg -ljpeg -lpng
 
 # Tools for checking and analysis
 CHECKCC = valgrind
@@ -57,7 +57,7 @@ $(TARGET): main.cpp $(OBJECT)
 
 # Compile each source file (*.cpp) into an object file (*.o) with dependency generation (-MMD), ensuring the output is stored in the object directory.  
 $(OBJECT_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp | $(OBJECT_DIRECTORY)
-	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) -MMD -c $< -o $@
+	$(CXX) $(CXX_FLAG) $(INCLUDE_PATH) $(OPTIMIZATION_FLAG) -MMD -c $< -o $@
 
 # Run static code analysis with cppcheck
 check: $(CPPCHECK)

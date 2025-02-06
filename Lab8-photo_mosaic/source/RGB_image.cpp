@@ -1,4 +1,5 @@
 #include "RGB_image.h"
+#include <cassert>
 
 // Load image from file and initialize pixel data
 bool RGB_image::load_image(const std::string& file_name) {
