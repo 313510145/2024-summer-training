@@ -2,93 +2,72 @@
 #include <queue>
 #include <algorithm>
 
-// Function to parse Verilog input and construct internal gate representations
 void quine_mccluskey::input_verilog(std::istream& is) {
     std::string str;
-    
-    // Read module name
     is >> str >> this->name;
     getline(is, str);
-
-    // Parse primary inputs (PI)
     is >> str;
     do {
         is >> str;
         gate* g = new gate();
-        g->set_name(str.substr(0, str.size() - 1)); // Remove trailing comma/semicolon
-        g->set_function(G_PI); // Set gate function as primary input
-        this->PI_list.push_back(g); // Add to PI list
-        this->name_to_gate[g->get_name()] = g; // Map name to gate
-    } while (str[str.size() - 1] != ';'); // Continue until ';' is found
-
-    // Parse primary outputs (PO)
+        g->set_name(str.substr(0, str.size() - 1));
+        g->set_function(G_PI);
+        this->PI_list.push_back(g);
+        this->name_to_gate[g->get_name()] = g;
+    } while (str[str.size() - 1] != ';');
     is >> str;
     do {
         is >> str;
         gate* g = new gate();
-        g->set_name(str.substr(0, str.size() - 1)); // Remove trailing comma/semicolon
-        g->set_function(G_PO); // Set gate function as primary output
-        this->PO_list.push_back(g); // Add to PO list
-    } while (str[str.size() - 1] != ';'); // Continue until ';' is found
-
-    // Parse internal gates
+        g->set_name(str.substr(0, str.size() - 1));
+        g->set_function(G_PO);
+        this->PO_list.push_back(g);
+    } while (str[str.size() - 1] != ';');
     is >> str;
     do {
         is >> str;
         gate* g = new gate();
-        g->set_name(str.substr(0, str.size() - 1)); // Remove trailing comma/semicolon
-        this->netlist.push_back(g); // Add to netlist
-        this->name_to_gate[g->get_name()] = g; // Map name to gate
-    } while (str[str.size() - 1] != ';'); // Continue until ';' is found
-
-    // Add PI gates to netlist
+        g->set_name(str.substr(0, str.size() - 1));
+        this->netlist.push_back(g);
+        this->name_to_gate[g->get_name()] = g;
+    } while (str[str.size() - 1] != ';');
     for (auto i: this->PI_list) {
         this->netlist.push_back(i);
     }
-
-    // Add PO gates to netlist and connect them to internal gates
     for (auto i: this->PO_list) {
         gate* g = new gate();
         g->set_name(i->get_name());
-        i->set_name("PO_" + i->get_name()); // Prefix PO name with "PO_"
+        i->set_name("PO_" + i->get_name());
         g->add_output(i);
         i->add_input(g);
         this->netlist.push_back(i);
         this->netlist.push_back(g);
         this->name_to_gate[g->get_name()] = g;
     }
-
-    // Parse gate connections and functions
     std::vector<std::string> v;
     is >> str;
     while (str != "endmodule") {
-        str.resize(str.find('_')); // Trim to base name
+        str.resize(str.find('_'));
         v.push_back(str);
         is >> str;
         do {
             is >> str;
             v.push_back(str);
-        } while (str[str.size() - 1] != ';'); // Continue until ';' is found
-
-        // Configure gate function and inputs
+        } while (str[str.size() - 1] != ';');
         str = v.back();
         v.pop_back();
-        str.resize(str.size() - 2); // Remove trailing characters
+        str.resize(str.size() - 2);
         gate* g = this->name_to_gate[str];
         g->set_function(this->name_to_function[v[0]]);
-
-        // Connect inputs to gate
         str = v[1];
-        str = str.substr(1, str.size() - 2); // Remove parentheses
+        str = str.substr(1, str.size() - 2);
         g->add_input(this->name_to_gate[str]);
         this->name_to_gate[str]->add_output(g);
-
-        // Add additional inputs for multi-input gates
         GATE_FUNCTION gf = g->get_function();
-        if (gf != G_BUF && gf != G_NOT) { // Skip single-input gates
+        if (gf != G_BUF && gf != G_NOT) {
             for (unsigned int i = 2; i < v.size(); i++) {
                 str = v[i];
-                str.resize(str.size() - 1); // Remove trailing comma/semicolon
+                str.resize(str.size() - 1);
                 g->add_input(this->name_to_gate[str]);
                 this->name_to_gate[str]->add_output(g);
             }
@@ -96,39 +75,28 @@ void quine_mccluskey::input_verilog(std::istream& is) {
         v.clear();
         is >> str;
     }
-
-    // Perform levelization and minimize using Quine-McCluskey algorithm
     levelization();
     enumerate_all_combination();
     do_quine_mccluskey();
 }
 
-// Function to output the design in BLIF format
 void quine_mccluskey::output_blif(std::ostream& os) {
     os << ".model " << this->name << std::endl
        << ".inputs";
-
-    // Output all primary inputs
     for (const auto i: this->PI_list) {
         os << " " << i->get_name();
     }
     os << "\n.outputs";
-
-    // Output all primary outputs
     for (const auto i: this->PO_list) {
         os << " " << i->get_name().substr(3, i->get_name().length() - 3);
     }
     os << "\n";
-
-    // Write logic table for each output
     for (unsigned int o = 0; o < this->PO_list.size(); o++) {
         os << "\n.names";
         for (const auto pi: this->PI_list) {
             os << " " << pi->get_name();
         }
         os << " " << this->PO_list[o]->get_name().substr(3, this->PO_list[o]->get_name().length() - 3) << std::endl;
-
-        // Output minterms
         for (std::set<std::string>::reverse_iterator it = this->prime_implicant[o].rbegin(); it != this->prime_implicant[o].rend(); ++it) {
             os << (*it) << " 1" << std::endl;
         }
@@ -136,11 +104,8 @@ void quine_mccluskey::output_blif(std::ostream& os) {
     os << "\n.end\n";
 }
 
-// Constructor to initialize variables and gate functions
 quine_mccluskey::quine_mccluskey() {
     this->name = "";
-
-    // Map string representations to gate functions
     name_to_function["and"] = G_AND;
     name_to_function["or"] = G_OR;
     name_to_function["xor"] = G_XOR;
@@ -149,18 +114,14 @@ quine_mccluskey::quine_mccluskey() {
     name_to_function["xnor"] = G_XNOR;
     name_to_function["buf"] = G_BUF;
     name_to_function["not"] = G_NOT;
-
     this->max_level = 0;
     this->on_set = nullptr;
     this->prime_implicant = nullptr;
 }
 
-// Destructor to free memory and clear data structures
 quine_mccluskey::~quine_mccluskey() {
-    this->name_to_function.clear(); // Clear function map
-    this->name_to_gate.clear();    // Clear gate map
-
-    // Free memory allocated for minterms and prime implicants
+    this->name_to_function.clear();
+    this->name_to_gate.clear();
     for (unsigned int o = 0; o < this->PO_list.size(); o++) {
         for (unsigned int i = 0; i <= this->PI_list.size(); i++) {
             this->on_set[o][i].clear();
@@ -170,8 +131,6 @@ quine_mccluskey::~quine_mccluskey() {
     }
     delete [] this->on_set;
     delete [] this->prime_implicant;
-
-    // Clear and delete gate objects
     this->PI_list.clear();
     this->PO_list.clear();
     for (auto i: this->netlist) {
@@ -181,23 +140,17 @@ quine_mccluskey::~quine_mccluskey() {
 }
 
 void quine_mccluskey::levelization() {
-    // Create a queue to store gates for processing
     std::queue<gate*> q;
-    
-    // Initialize levels for primary inputs (PIs)
     for (const auto i: this->PI_list) {
         for (unsigned int j = 0; j < i->get_fan_out_num(); j++) {
             gate* g = i->get_fan_out(j);
             g->add_count_1();
             if (g->get_count() == g->get_fan_in_num()) {
-                // Set the level of gates connected to PIs
                 i->get_fan_out(j)->set_level(1);
                 q.push(g);
             }
         }
     }
-    
-    // Process the queue to propagate levels through the netlist
     while (!q.empty()) {
         const gate* g = q.front();
         q.pop();
@@ -212,8 +165,6 @@ void quine_mccluskey::levelization() {
             }
         }
     }
-
-    // Reset counts and determine the maximum level
     for (auto i: this->netlist) {
         i->reset_count();
         if (i->get_level() > this->max_level) {
@@ -223,26 +174,17 @@ void quine_mccluskey::levelization() {
 }
 
 void quine_mccluskey::enumerate_all_combination() {
-    // Create a queue for each level in the netlist
     std::queue<gate*>* q = new std::queue<gate*>[this->max_level + 1];
-
-    // Allocate memory for on-sets and prime implicants
     this->on_set = new std::vector<std::vector<std::pair<std::string, bool>>>[this->PO_list.size()];
     this->prime_implicant = new std::set<std::string>[this->PO_list.size()];
-
-    // Initialize on-sets for each primary output (PO)
     for (unsigned int i = 0; i < this->PO_list.size(); i++) {
         this->on_set[i].resize(this->PI_list.size() + 1);
     }
-
-    // Initialize primary inputs (PIs) to S0 and increment count
     for (unsigned int i = 0; i < this->PI_list.size(); i++) {
         this->PI_list[i]->set_value(S0);
         this->PI_list[i]->add_count_1();
     }
-
     do {
-        // Process each primary input
         for (unsigned int i = 0; i < this->PI_list.size(); i++) {
             if (this->PI_list[i]->get_count() > 0) {
                 this->PI_list[i]->reset_count();
@@ -254,16 +196,12 @@ void quine_mccluskey::enumerate_all_combination() {
                 }
             }
         }
-
-        // Process each level in the netlist
         for (unsigned int i = 0; i <= this->max_level; i++) {
             while (!q[i].empty()) {
                 gate* g = q[i].front();
                 q[i].pop();
                 g->reset_count();
                 std::bitset<BIT_LENGTH> value = g->get_fan_in(0)->get_value();
-
-                // Perform logic operations based on gate function
                 switch (g->get_function()) {
                     case G_AND:
                     case G_NAND:
@@ -286,16 +224,12 @@ void quine_mccluskey::enumerate_all_combination() {
                     default:
                         break;
                 }
-
-                // Handle inverted gates
                 if (g->is_inverted()) {
                     value = ~value;
                     bool temp = value[0];
                     value[0] = value[1];
                     value[1] = temp;
                 }
-
-                // Propagate updated values to fan-outs
                 if (g->get_value() != value) {
                     g->set_value(value);
                     for (unsigned int j = 0; j < g->get_fan_out_num(); j++) {
@@ -307,8 +241,6 @@ void quine_mccluskey::enumerate_all_combination() {
                 }
             }
         }
-
-        // Update on-sets based on PO values
         for (unsigned int i = 0; i < this->PO_list.size(); i++) {
             if (this->PO_list[i]->get_value() == S1) {
                 std::string str = "";
@@ -326,19 +258,14 @@ void quine_mccluskey::enumerate_all_combination() {
             }
         }
     } while (next_permutation());
-
-    // Free dynamically allocated memory for queues
     delete [] q;
 }
 
 void quine_mccluskey::do_quine_mccluskey() {
-    // Reduce implicants using Quine-McCluskey method
     std::pair<std::string, bool> temp_implicant;
     std::vector<std::pair<std::string, bool>> v;
     unsigned int count;
     temp_implicant.second = true;
-
-    // Process prime implicants for each PO
     for (unsigned int o = 0; o < this->PO_list.size(); o++) {
         for (unsigned int i = 0; i < this->PI_list.size(); i++) {
             for (unsigned int j = 0; j < this->PI_list.size() - i; j++) {
@@ -382,7 +309,6 @@ void quine_mccluskey::do_quine_mccluskey() {
 }
 
 bool quine_mccluskey::next_permutation() {
-    // Generate next permutation of input combinations
     for (unsigned int i = 0; i < this->PI_list.size(); i++) {
         if (this->PI_list[i]->get_value() != S1) {
             this->PI_list[i]->set_value(S1);
