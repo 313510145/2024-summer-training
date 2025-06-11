@@ -56,9 +56,9 @@ void filter::box_gray(const int& w, const int& h, int** const pixel, const int& 
         }
     }
     for (auto y = 0; y < h; y++) {
-        delete[] result_pixel[y];
+        delete [] result_pixel[y];
     }
-    delete[] result_pixel;
+    delete [] result_pixel;
 }
 
 void filter::box_RGB(const int& w, const int& h, int*** const pixel, const int& r) {
@@ -131,11 +131,11 @@ void filter::box_RGB(const int& w, const int& h, int*** const pixel, const int& 
     }
     for (auto y = 0; y < h; y++) {
         for (auto x = 0; x < w; x++) {
-            delete[] result_pixel[y][x];
+            delete [] result_pixel[y][x];
         }
-        delete[] result_pixel[y];
+        delete [] result_pixel[y];
     }
-    delete[] result_pixel;
+    delete [] result_pixel;
 }
 
 void filter::sobel_gray(const int& w, const int& h, int** const pixel) {
@@ -161,9 +161,9 @@ void filter::sobel_gray(const int& w, const int& h, int** const pixel) {
         for (auto x = 0; x < w; x++) {
             pixel[y][x] = result_pixel[y][x];
         }
-        delete[] result_pixel[y];
+        delete [] result_pixel[y];
     }
-    delete[] result_pixel;
+    delete [] result_pixel;
     normalization_gray(w, h, pixel);
 }
 
@@ -194,11 +194,11 @@ void filter::sobel_RGB(const int& w, const int& h, int*** const pixel) {
             pixel[y][x][0] = result_pixel[y][x][0];
             pixel[y][x][1] = result_pixel[y][x][1];
             pixel[y][x][2] = result_pixel[y][x][2];
-            delete[] result_pixel[y][x];
+            delete [] result_pixel[y][x];
         }
-        delete[] result_pixel[y];
+        delete [] result_pixel[y];
     }
-    delete[] result_pixel;
+    delete [] result_pixel;
     normalization_RGB(w, h, pixel);
 }
 

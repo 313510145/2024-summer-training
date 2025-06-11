@@ -53,11 +53,11 @@ int** image_loader::load_gray(const std::string& file_name, int* const w, int* c
         }
         for (auto y = 0; y < *h; y++) {
             for (auto x = 0; x < *w; x++) {
-                delete[] pixel_3D[y][x];
+                delete [] pixel_3D[y][x];
             }
-            delete[] pixel_3D[y];
+            delete [] pixel_3D[y];
         }
-        delete[] pixel_3D;
+        delete [] pixel_3D;
         return pixel;
     }
     return nullptr;

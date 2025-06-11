@@ -108,11 +108,11 @@ RGB_image::RGB_image(const RGB_image& RGBi): image(RGBi.width, RGBi.height) {
 RGB_image::~RGB_image() {
     for (int y = 0; y < this->height; ++y) {
         for (int x = 0; x < this->width; ++x) {
-            delete[] this->pixel[y][x];
+            delete [] this->pixel[y][x];
         }
-        delete[] this->pixel[y];
+        delete [] this->pixel[y];
     }
-    delete[] this->pixel;
+    delete [] this->pixel;
 }
 
 RGB_image& RGB_image::operator =(const RGB_image& RGBi) {
@@ -121,11 +121,11 @@ RGB_image& RGB_image::operator =(const RGB_image& RGBi) {
     }
     for (int y = 0; y < this->height; ++y) {
         for (int x = 0; x < this->width; ++x) {
-            delete[] this->pixel[y][x];
+            delete [] this->pixel[y][x];
         }
-        delete[] this->pixel[y];
+        delete [] this->pixel[y];
     }
-    delete[] this->pixel;
+    delete [] this->pixel;
     this->width = RGBi.width;
     this->height = RGBi.height;
     this->pixel = new int**[this->height];
